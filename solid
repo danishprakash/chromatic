@@ -1,0 +1,43 @@
+#!/usr/local/bin/python3
+
+import re
+import argparse
+from PIL import Image
+
+def create_image(size=None, color=None, path=None):
+    if not(size and color):
+        return
+    img = Image.new('RGB', size, color)
+    img.save('/Users/danishprakash/programming/solid/sample.png')
+    print('Done')
+
+def generate_image(args):
+    if args.size and args.color:
+        size = tuple(int(x) for x in tuple(args.size.split(',')))
+
+        if re.match('^#.*', args.color):
+            color = tuple(int(args.color[i:i+2], 16) for i in (1, 3, 4))
+        else:
+            color = args.color
+
+    if args.path:
+        # TODO: convert relative path to absolut
+        path = args.path
+        print(path)
+
+    print(size, color)
+    # create_image(size, color)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--size', help='Size of the image in LxB', type=str)
+    parser.add_argument('--path', help='Path to the file', type=str)
+    parser.add_argument('--color', help='Color', type=str)
+    parser.add_argument('--imgur', help='Upload image to imgur and return URL', type=str)
+    args = parser.parse_args()
+    generate_image(args)
+
+main()
+
+
