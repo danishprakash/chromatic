@@ -1,15 +1,26 @@
 #!/usr/local/bin/python3
 
-import re
 import argparse
+import os
+import re
+
 from PIL import Image
 
-def create_image(size=None, color=None, path=None):
+def create_image(size=None, color=None):
     if not(size and color):
         return
+
     img = Image.new('RGB', size, color)
-    img.save('/Users/danishprakash/programming/solid/sample.png')
-    print('Done')
+    return img
+
+def save_image(image, path):
+    if path:
+        path = os.path.abspath(path) + '/image.png'
+    else:
+        path = os.getcwd() + '/image.png'
+
+    image.save(path)
+
 
 def generate_image(args):
     if args.size and args.color:
@@ -20,13 +31,7 @@ def generate_image(args):
         else:
             color = args.color
 
-    if args.path:
-        # TODO: convert relative path to absolut
-        path = args.path
-        print(path)
-
-    print(size, color)
-    # create_image(size, color)
+    save_image(create_image(size, color), args.path)
 
 
 def main():
@@ -39,5 +44,4 @@ def main():
     generate_image(args)
 
 main()
-
 
