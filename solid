@@ -15,11 +15,11 @@ def create_image(size=None, color=None):
     if not(size and color):
         return
 
-    img = Image.new('RGB', size, color)
-    return img
+    return Image.new('RGB', size, color)
 
 
 def save_image(image, path):
+    global FILE_NAME
     if path:
         path = os.path.abspath(path) + '/' + FILE_NAME
     else:
@@ -57,6 +57,12 @@ def generate_image(args):
             color = tuple(int(args.color[i:i+2], 16) for i in (1, 3, 4))
         else:
             color = args.color
+    else:
+        return
+
+    if args.name:
+        global FILE_NAME
+        FILE_NAME = args.name
 
     if not args.path:
         args.path = os.path.abspath('.')
@@ -64,8 +70,7 @@ def generate_image(args):
     save_image(create_image(size, color), args.path)
 
     if args.imgur:
-        if args.open:
-            open_url = True
+        open_url = True if args.open else False
         upload_to_imgur(args.path, open_url=open_url)
     if args.nosave:
         remove_image(args.path)
@@ -79,6 +84,7 @@ def main():
     parser.add_argument('--nosave', help='Don\'t save file locally.', action='store_true')
     parser.add_argument('--imgur', help='Upload image to imgur and return URL', action='store_true')
     parser.add_argument('--open', help='Open the uploaded imgur URL in browser', action='store_true')
+    parser.add_argument('--name', help='Name of the image file generated.', type=str)
     args = parser.parse_args()
     generate_image(args)
 
