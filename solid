@@ -12,6 +12,7 @@ import pyperclip
 FILE_NAME='solid_image.png'
 
 def create_image(size=None, color=None):
+    """Create an PIL Image object."""
     if not(size and color):
         return
 
@@ -19,6 +20,7 @@ def create_image(size=None, color=None):
 
 
 def save_image(image, path):
+    "Save `image` to `path`"""
     global FILE_NAME
     if path:
         path = os.path.abspath(path) + '/' + FILE_NAME
@@ -28,6 +30,7 @@ def save_image(image, path):
 
 
 def upload_to_imgur(path, to_clipboard=True, open_url=False):
+    """Uploads generated image to imgur""" 
     config_parser = configparser.RawConfigParser()
     config_parser.read('{0}/.solid.conf'.format(os.getenv('HOME')))
     client_id = config_parser.get('DEFAULT', 'client_id')
@@ -45,6 +48,7 @@ def upload_to_imgur(path, to_clipboard=True, open_url=False):
 
 
 def remove_image(path):
+    """Delete the generated image"""
     os.remove('{0}/{1}'.format(path, FILE_NAME))
 
 
@@ -52,7 +56,6 @@ def generate_image(args):
     # TODO: improve flow here
     if args.size and args.color:
         size = tuple(int(x) for x in tuple(args.size.split(',')))
-
         if re.match('^#.*', args.color):
             color = tuple(int(args.color[i:i+2], 16) for i in (1, 3, 4))
         else:
@@ -77,6 +80,7 @@ def generate_image(args):
 
 
 def main():
+    """Parse cli arguments and flags"""
     parser = argparse.ArgumentParser()
     parser.add_argument('--size', help='Size of the image in LxB', type=str)
     parser.add_argument('--path', help='Path to the file', type=str)
