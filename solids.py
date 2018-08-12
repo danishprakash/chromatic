@@ -1,7 +1,6 @@
-#!/usr/local/bin/python3
+"""Generate solid backgrounds instantly"""
 
 import argparse
-import configparser
 import os
 import re
 
@@ -9,18 +8,22 @@ from imgurpython import ImgurClient
 from PIL import Image
 import pyperclip
 
-FILE_NAME='solid_image.png'
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
+
+FILE_NAME = 'solid_image.png'
 
 def create_image(size=None, color=None):
-    """Create an PIL Image object."""
-    if not(size and color):
-        return
+    """Return a PIL Image object."""
 
     return Image.new('RGB', size, color)
 
 
 def save_image(image, path):
-    "Save `image` to `path`"""
+    """Save `image` to `path`"""
+
     global FILE_NAME
     if path:
         path = os.path.abspath(path) + '/' + FILE_NAME
@@ -30,30 +33,43 @@ def save_image(image, path):
 
 
 def upload_to_imgur(path, to_clipboard=True, open_url=False):
-    """Uploads generated image to imgur""" 
+    """
+    Uploads generated image to imgur
+
+    Parameters:
+        path (str)          : Absolute path to the image file generated.
+        to_clipboard (bool) : Flag for copying image URL to clipboard.
+        open_url (bool)     : Flag for opening the URL in browser.
+    """
+
     config_parser = configparser.RawConfigParser()
     config_parser.read('{0}/.solid.conf'.format(os.getenv('HOME')))
     client_id = config_parser.get('DEFAULT', 'client_id')
     client_secret = config_parser.get('DEFAULT', 'client_secret')
-    
+
     client = ImgurClient(client_id, client_secret)
     url = client.upload_from_path('{0}/{1}'.format(path, FILE_NAME), anon=True).get('link', '404')
 
     if to_clipboard:
-        pyperclip.copy(url)
+        pyperclip.copy(str(url))
         if open_url:
-            os.system('open {0}'.format(url))
+            try:
+                os.system('open {0}'.format(url))
+            except:
+                raise Exception("`open` command not found.")
     else:
         print(url)
 
 
 def remove_image(path):
     """Delete the generated image"""
+
     os.remove('{0}/{1}'.format(path, FILE_NAME))
 
 
 def generate_image(args):
-    # TODO: improve flow here
+    """Parse arguments appropriately"""
+
     if args.size and args.color:
         size = tuple(int(x) for x in tuple(args.size.split(',')))
         if re.match('^#.*', args.color):
@@ -61,12 +77,11 @@ def generate_image(args):
         else:
             color = args.color
     else:
-        return
+        raise Exception("`color` and `size` are required arguments.")
 
     if args.name:
         global FILE_NAME
         FILE_NAME = args.name
-
     if not args.path:
         args.path = os.path.abspath('.')
 
@@ -75,23 +90,20 @@ def generate_image(args):
     if args.imgur:
         open_url = True if args.open else False
         upload_to_imgur(args.path, open_url=open_url)
-    if args.nosave:
-        remove_image(args.path)
+        if args.nosave:
+            remove_image(args.path)
 
 
 def main():
     """Parse cli arguments and flags"""
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--size', help='Size of the image in LxB', type=str)
-    parser.add_argument('--path', help='Path to the file', type=str)
-    parser.add_argument('--color', help='Color', type=str)
-    parser.add_argument('--nosave', help='Don\'t save file locally.', action='store_true')
-    parser.add_argument('--imgur', help='Upload image to imgur and return URL', action='store_true')
-    parser.add_argument('--open', help='Open the uploaded imgur URL in browser', action='store_true')
-    parser.add_argument('--name', help='Name of the image file generated.', type=str)
+    parser.add_argument('--color', help='HEX color code', type=str)
+    parser.add_argument('--size', help='size of the image in LxB', type=str)
+    parser.add_argument('--imgur', help='upload image to imgur and return URL', action='store_true')
+    parser.add_argument('--nosave', help='don\'t save file locally', action='store_true')
+    parser.add_argument('--open', help='open imgur URL in browser', action='store_true')
+    parser.add_argument('--path', help='path to the file', type=str)
+    parser.add_argument('--name', help='name of the image file generated', type=str)
     args = parser.parse_args()
     generate_image(args)
-
-if __name__ == '__main__':
-    main()
-
