@@ -1,0 +1,7 @@
+*.pyc
+*.egg
+*.png
+
+build/
+dist/
+chromatic.egg-info/
