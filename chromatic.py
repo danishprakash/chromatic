@@ -1,4 +1,4 @@
-"""Generate solid backgrounds instantly"""
+"""Generate monochromatic backgrounds instantly"""
 
 import argparse
 import os
@@ -13,7 +13,7 @@ try:
 except ImportError:
     import ConfigParser as configparser
 
-FILE_NAME = 'solid_image.png'
+FILE_NAME = 'monochromatic_backgrounds.png'
 
 def create_image(size=None, color=None):
     """Return a PIL Image object."""
@@ -43,7 +43,7 @@ def upload_to_imgur(path, to_clipboard=True, open_url=False):
     """
 
     config_parser = configparser.RawConfigParser()
-    config_parser.read('{0}/.solid.conf'.format(os.getenv('HOME')))
+    config_parser.read('{0}/.chromatic.conf'.format(os.getenv('HOME')))
     client_id = config_parser.get('DEFAULT', 'client_id')
     client_secret = config_parser.get('DEFAULT', 'client_secret')
 
