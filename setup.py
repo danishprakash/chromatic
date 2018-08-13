@@ -4,13 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name='solids',
+    name='chromatic',
     version='1.0.0',
-    description='Generate solid backgrounds instantly',
+    description='Generate monochromatic backgrounds instantly',
+    long_description=long_description,
     author='Danish Prakash',
     author_email='danishprakash@outlook.com',
-    url='https://github.com/prakashdanish/solids',
-    py_modules=['solids'],
+    url='https://github.com/prakashdanish/chromatic',
+    py_modules=['chromatic'],
     install_requires=[
         'requests',
         'pyperclip',
@@ -19,7 +20,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'solids = solids:main'
+            'chromatic = chromatic:main'
         ],
     },
 )
