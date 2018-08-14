@@ -42,8 +42,13 @@ def upload_to_imgur(path, to_clipboard=True, open_url=False):
         open_url (bool)     : Flag for opening the URL in browser.
     """
 
+    configuration_file = '{0}/.chromatic.conf'.format(os.getenv('HOME'))
+    if not os.path.isfile(configuration_file):
+        with open(configuration_file, 'w') as conf:
+            conf.write('[DEFAULT]\nclient_id=\nclient_secret=')
+
     config_parser = configparser.RawConfigParser()
-    config_parser.read('{0}/.chromatic.conf'.format(os.getenv('HOME')))
+    config_parser.read(configuration_file)
     client_id = config_parser.get('DEFAULT', 'client_id')
     client_secret = config_parser.get('DEFAULT', 'client_secret')
 
