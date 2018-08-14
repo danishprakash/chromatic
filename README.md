@@ -19,6 +19,20 @@ $ git clone https://github.com/prakashdanish/chromatic.git && cd chromatic
 $ python3 setup.py install
 ```
 
+#### Imgur API
+If you wish to use `--imgur` option which uploads the generated file to imgur and copies the image link to the clipboard, you'd need the API keys, namely `client_id` and `client_secret`
+These are fairly easy to obtain.
+1. Register [here](https://imgur.com/signin?redirect=https%3A%2F%2Fapi.imgur.com%2Foauth2%2Faddclient)
+2. Copy your keys to `~/.chromatic.conf`
+
+```conf
+[DEFAULT]
+client_id=<your_id>
+client_secret=<your_secret>
+```
+
+Your config file should already be present in your home dir `~/.chromatic.conf` and if it's not, then run `chromatic` once without any options or create the file manually.
+
 ## Usage
 
 ```sh
