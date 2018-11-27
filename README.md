@@ -4,6 +4,8 @@
 <img src="https://i.imgur.com/pNYTBJU.gif" height="500">
 </p>
 
+[![Downloads](https://pepy.tech/badge/chromatic)](https://pepy.tech/project/chromatic)
+
 ## Installation
 
 #### pip
@@ -15,7 +17,7 @@ $ pip install chromatic
 #### Manual
 
 ```sh
-$ git clone https://github.com/prakashdanish/chromatic.git && cd chromatic
+$ git clone https://github.com/danishprakash/chromatic.git && cd chromatic
 $ python3 setup.py install
 ```
 
@@ -59,6 +61,6 @@ Do you want to make this better? Open an issue and/or a PR on Github. Thanks!
 ## License
 MIT License
 
-Copyright (c) 2018 [Danish Prakash](https://github.com/prakashdanish)
+Copyright (c) 2018 [Danish Prakash](https://github.com/danishprakash)
 
 ---
